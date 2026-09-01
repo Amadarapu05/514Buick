@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 514 Buick
 
 Apartment website for 514 Buick Street — events, RSVP, music queue, TV dashboard, and anonymous confessions.
@@ -89,3 +90,7 @@ INSERT INTO carousel_images (url, alt_text, sort_order) VALUES
 
 INSERT INTO birthdays (name, month, day) VALUES ('Roommate', 1, 15);
 ```
+=======
+# 514Buick
+514Buick Apartment Website
+>>>>>>> 01e68a50728efca8f903a7785647762a8aaa84f4
