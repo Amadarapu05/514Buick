@@ -1,0 +1,310 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bitter:wght@400&family=Kaushan+Script&family=Lobster&family=Major+Mono+Display&family=Orbitron:wght@500&family=Pacifico&family=Ranchers&family=Righteous&family=Space+Grotesk:wght@500;600;700&display=swap");
+@import "tailwindcss";
+
+:root {
+  --background: #fafafa;
+  --foreground: #0a0a0a;
+  --card: #ffffff;
+  --card-foreground: #0a0a0a;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --border: #e4e4e7;
+  --accent: #c9a227;
+  --accent-foreground: #0a0a0a;
+  --primary: #0a0a0a;
+  --primary-foreground: #fafafa;
+  --destructive: #dc2626;
+  --ring: #c9a227;
+  --radius: 0.5rem;
+  --glow-gold: 0 0 20px rgba(201, 162, 39, 0.4);
+  --glow-gold-sm: 0 0 10px rgba(201, 162, 39, 0.25);
+}
+
+.dark {
+  --background: #08080b;
+  --foreground: #ededed;
+  --card: #0f0f14;
+  --card-foreground: #ededed;
+  --muted: #111118;
+  --muted-foreground: #8a8f98;
+  --border: rgba(255, 255, 255, 0.07);
+  --accent: #c9a227;
+  --accent-foreground: #08080b;
+  --primary: #ededed;
+  --primary-foreground: #08080b;
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glow-gold: 0 0 30px rgba(201, 162, 39, 0.45);
+  --glow-gold-sm: 0 0 12px rgba(201, 162, 39, 0.3);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-destructive: var(--destructive);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-geist-sans);
+  --font-display: var(--font-display);
+  --radius-lg: var(--radius);
+}
+
+* {
+  border-color: var(--border);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-display), "Playfair Display", Georgia, serif;
+}
+
+/* ─── Homepage title font cycle ───────────────────────────── */
+@keyframes buick-font-cycle {
+  0%,
+  100% {
+    font-family: var(--font-display), "Playfair Display", Georgia, serif;
+  }
+  20% {
+    font-family: "Kaushan Script", cursive;
+  }
+  30% {
+    font-family: "Lobster", cursive;
+  }
+  40% {
+    font-family: "Ranchers", cursive;
+  }
+  50% {
+    font-family: "Bitter", serif;
+  }
+  60% {
+    font-family: "Bebas Neue", sans-serif;
+  }
+  90% {
+    font-family: "Righteous", cursive;
+  }
+}
+
+.animate-buick-fonts {
+  animation: buick-font-cycle 5s step-end infinite;
+}
+
+/* ─── Vertical carousel ────────────────────────────────────── */
+@keyframes vertical-scroll {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-50% - 0.5rem));
+  }
+}
+
+.animate-vertical-scroll {
+  animation: vertical-scroll 20s linear infinite;
+}
+
+/* ─── Entrance animations ──────────────────────────────────── */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out both;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+
+/* ─── Animated gradient hero background ───────────────────── */
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 300% 300%;
+  animation: gradient-shift 8s ease infinite;
+}
+
+/* ─── Gold glow pulse ─────────────────────────────────────── */
+@keyframes glow-pulse {
+  0%, 100% {
+    text-shadow:
+      0 0 20px rgba(201, 162, 39, 0.5),
+      0 0 40px rgba(201, 162, 39, 0.2);
+  }
+  50% {
+    text-shadow:
+      0 0 30px rgba(201, 162, 39, 0.8),
+      0 0 60px rgba(201, 162, 39, 0.35),
+      0 0 80px rgba(201, 162, 39, 0.15);
+  }
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* ─── Floating ambient blob ────────────────────────────────── */
+@keyframes blob-float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -20px) scale(1.05);
+  }
+  66% {
+    transform: translate(-20px, 10px) scale(0.97);
+  }
+}
+
+.animate-blob {
+  animation: blob-float 12s ease-in-out infinite;
+}
+
+.animate-blob-delay {
+  animation: blob-float 14s ease-in-out infinite reverse;
+  animation-delay: -4s;
+}
+
+/* ─── Nav link underline slide ─────────────────────────────── */
+.nav-link-underline {
+  position: relative;
+}
+
+.nav-link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(201, 162, 39, 0.6);
+  transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link-underline:hover::after,
+.nav-link-underline[data-active="true"]::after {
+  width: 100%;
+}
+
+/* ─── Glass card ───────────────────────────────────────────── */
+.glass-card {
+  background: var(--glass-bg, rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ─── Card glow on hover ───────────────────────────────────── */
+.card-glow {
+  transition:
+    box-shadow 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-glow:hover {
+  box-shadow: 0 0 0 1px rgba(201, 162, 39, 0.3), 0 0 30px rgba(201, 162, 39, 0.12), 0 8px 32px rgba(0, 0, 0, 0.4);
+  border-color: rgba(201, 162, 39, 0.25);
+  transform: translateY(-2px);
+}
+
+/* ─── Shimmer accent line ──────────────────────────────────── */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.shimmer-gold {
+  background: linear-gradient(
+    90deg,
+    #c9a227 0%,
+    #f0d060 40%,
+    #c9a227 60%,
+    #a07c18 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+
+/* ─── Reduced motion overrides ─────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up,
+  .animate-fade-in,
+  .animate-slide-in-left,
+  .animate-gradient,
+  .animate-glow-pulse,
+  .animate-blob,
+  .animate-blob-delay,
+  .animate-buick-fonts,
+  .animate-vertical-scroll {
+    animation: none !important;
+  }
+
+  .nav-link-underline::after {
+    transition: none;
+  }
+
+  .card-glow {
+    transition: none;
+  }
+}
