@@ -37,10 +37,15 @@ export async function updateSession(request: NextRequest) {
   const isAuthPage =
     path.startsWith("/login") || path.startsWith("/register");
   const isAdmin = path.startsWith("/admin");
+  // Home (/), /tv, login/register, and APIs stay public — TV loads without a session.
   const isProtected =
-    isAdmin || path.includes("/rsvp") || path === "/profile";
+    path.startsWith("/events") ||
+    path.startsWith("/music") ||
+    path.startsWith("/confessions") ||
+    path.startsWith("/admin") ||
+    path === "/profile";
 
-  if (!user && (isProtected || (path.startsWith("/events/") && path.endsWith("/rsvp")))) {
+  if (!user && isProtected) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("redirect", path);
