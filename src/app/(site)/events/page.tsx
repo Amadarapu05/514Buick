@@ -36,10 +36,6 @@ export default async function EventsPage({
 
   const { data: events } = await query;
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
   const featuredEvent = tab === "upcoming" ? events?.[0] : null;
   const listEvents =
     tab === "upcoming" ? (events?.slice(1) ?? []) : (events ?? []);
@@ -148,18 +144,6 @@ export default async function EventsPage({
           </div>
         ) : null}
       </div>
-
-      {!user && (
-        <p className="animate-fade-in delay-300 mt-8 text-center text-sm text-muted-foreground">
-          <Link
-            href="/login"
-            className="text-accent underline-offset-4 hover:underline"
-          >
-            Sign in
-          </Link>{" "}
-          to RSVP.
-        </p>
-      )}
     </div>
   );
 }

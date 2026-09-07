@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +10,7 @@ import { Label } from "@/components/ui/label";
 export function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") ?? "/";
+  const redirect = searchParams.get("redirect") ?? "/admin";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -26,13 +25,23 @@ export function LoginForm() {
       email,
       password,
     });
-    setLoading(false);
     if (authError) {
+      setLoading(false);
       setError(authError.message);
       return;
     }
-    await fetch("/api/auth/assign-role", { method: "POST" });
-    router.push(redirect);
+
+    const roleRes = await fetch("/api/auth/assign-role", { method: "POST" });
+    const roleData = await roleRes.json().catch(() => ({}));
+    if (roleData.role !== "host") {
+      await supabase.auth.signOut();
+      setLoading(false);
+      setError("This login is for apartment hosts only.");
+      return;
+    }
+
+    setLoading(false);
+    router.push(redirect.startsWith("/admin") ? redirect : "/admin");
     router.refresh();
   }
 
@@ -62,14 +71,8 @@ export function LoginForm() {
       </div>
       {error && <p className="text-sm text-destructive">{error}</p>}
       <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? "Signing in…" : "Sign in"}
+        {loading ? "Signing in…" : "Host sign in"}
       </Button>
-      <p className="text-center text-sm text-muted-foreground">
-        No account?{" "}
-        <Link href="/register" className="text-accent hover:underline">
-          Register
-        </Link>
-      </p>
     </form>
   );
 }

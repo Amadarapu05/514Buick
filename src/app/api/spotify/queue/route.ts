@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
 import {
   fetchSpotifyQueue,
   removeFromSpotifyQueueAtIndex,
@@ -16,14 +15,6 @@ export async function GET() {
 }
 
 export async function DELETE(request: Request) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
-    return NextResponse.json({ error: "Sign in to manage the queue" }, { status: 401 });
-  }
-
   const index = Number(new URL(request.url).searchParams.get("index"));
   if (!Number.isInteger(index) || index < 0) {
     return NextResponse.json({ error: "Invalid queue position" }, { status: 400 });

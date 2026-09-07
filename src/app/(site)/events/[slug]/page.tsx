@@ -35,21 +35,6 @@ export default async function EventDetailPage({
     .eq("event_id", event.id)
     .order("sort_order");
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  let userRsvp = null;
-  if (user) {
-    const { data } = await supabase
-      .from("rsvps")
-      .select("*")
-      .eq("event_id", event.id)
-      .eq("user_id", user.id)
-      .maybeSingle();
-    userRsvp = data;
-  }
-
   const { count: goingCount } = await supabase
     .from("rsvps")
     .select("*", { count: "exact", head: true })
@@ -64,7 +49,7 @@ export default async function EventDetailPage({
 
   const { data: rsvpRows } = await supabase
     .from("rsvps")
-    .select("id, status, profiles(display_name, email)")
+    .select("id, status, guest_name, profiles(display_name, email)")
     .eq("event_id", event.id)
     .in("status", ["going", "maybe"]);
 
@@ -73,6 +58,7 @@ export default async function EventDetailPage({
       const raw = row.profiles;
       const profile = Array.isArray(raw) ? raw[0] : raw;
       const displayName =
+        row.guest_name?.trim() ||
         (profile as { display_name: string | null } | null)?.display_name?.trim() ||
         (profile as { email: string } | null)?.email?.split("@")[0] ||
         "Guest";
@@ -167,12 +153,7 @@ export default async function EventDetailPage({
               />
             )}
           </div>
-          <RsvpSection
-            eventId={event.id}
-            userRsvp={userRsvp}
-            isLoggedIn={!!user}
-            eventStatus={event.status}
-          />
+          <RsvpSection eventId={event.id} eventStatus={event.status} />
         </div>
       </div>
     </article>

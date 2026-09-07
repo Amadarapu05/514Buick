@@ -30,7 +30,7 @@ export async function Navbar() {
         >
           <span className="shimmer-gold">514 Buick</span>
         </Link>
-        <NavClient user={user ? { isHost, displayName } : null} />
+        <NavClient user={user && isHost ? { isHost, displayName } : null} />
       </nav>
     </header>
   );

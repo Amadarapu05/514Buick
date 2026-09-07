@@ -37,13 +37,14 @@ export async function updateSession(request: NextRequest) {
   const isAuthPage =
     path.startsWith("/login") || path.startsWith("/register");
   const isAdmin = path.startsWith("/admin");
-  // Home (/), /tv, login/register, and APIs stay public — TV loads without a session.
-  const isProtected =
-    path.startsWith("/events") ||
-    path.startsWith("/music") ||
-    path.startsWith("/confessions") ||
-    path.startsWith("/admin") ||
-    path === "/profile";
+  const isProtected = isAdmin || path === "/profile";
+
+  // Public register is disabled — hosts use /login only
+  if (path.startsWith("/register")) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
 
   if (!user && isProtected) {
     const url = request.nextUrl.clone();
@@ -54,7 +55,7 @@ export async function updateSession(request: NextRequest) {
 
   if (user && isAuthPage) {
     const url = request.nextUrl.clone();
-    url.pathname = "/";
+    url.pathname = "/admin";
     return NextResponse.redirect(url);
   }
 

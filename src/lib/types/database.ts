@@ -45,7 +45,9 @@ export interface EventImage {
 export interface Rsvp {
   id: string;
   event_id: string;
-  user_id: string;
+  user_id: string | null;
+  guest_name: string | null;
+  phone: string | null;
   status: RsvpStatus;
   notes: string | null;
   created_at: string;

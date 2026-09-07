@@ -17,5 +17,6 @@ export async function POST() {
     return NextResponse.json({ role: "host" });
   }
 
+  // Non-hosts are not allowed — keep role as guest and let the client sign them out
   return NextResponse.json({ role: "guest" });
 }

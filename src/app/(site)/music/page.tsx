@@ -36,7 +36,6 @@ export default async function MusicPage() {
       <div className="mt-10">
         <MusicDashboard
           isHost={isHost}
-          isLoggedIn={!!user}
           spotifyConnected={spotifyConnected}
         />
       </div>

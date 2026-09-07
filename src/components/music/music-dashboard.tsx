@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { Music2, Search, X } from "lucide-react";
 import type { SpotifyQueueTrack } from "@/lib/spotify/queue";
 import { getSpotifyRedirectUri } from "@/lib/spotify/redirect";
@@ -31,11 +30,9 @@ async function parseJsonResponse(res: Response) {
 
 export function MusicDashboard({
   isHost,
-  isLoggedIn,
   spotifyConnected,
 }: {
   isHost: boolean;
-  isLoggedIn: boolean;
   spotifyConnected: boolean;
 }) {
   const [nowPlaying, setNowPlaying] = useState<NowPlaying | null>(null);
@@ -123,10 +120,6 @@ export function MusicDashboard({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ spotify_track_id: track.id }),
     });
-    if (res.status === 401) {
-      showToast("Sign in to add songs.");
-      return;
-    }
     if (!res.ok) {
       const data = await parseJsonResponse(res);
       showToast(data.error ?? "Failed to add");
@@ -139,10 +132,6 @@ export function MusicDashboard({
   }
 
   async function removeFromQueue(index: number, trackName: string) {
-    if (!isLoggedIn) {
-      showToast("Sign in to remove songs.");
-      return;
-    }
     setRemovingIndex(index);
     const res = await fetch(`/api/spotify/queue?index=${index}`, {
       method: "DELETE",
@@ -172,16 +161,6 @@ export function MusicDashboard({
         </div>
       )}
 
-      {!isLoggedIn && (
-        <div className="rounded-lg border border-accent/50 bg-accent/10 px-4 py-3 text-center text-sm">
-          <Link
-            href="/login?redirect=/music"
-            className="font-medium text-accent hover:underline"
-          >
-            Sign in to add songs.
-          </Link>
-        </div>
-      )}
       {!spotifyConnected && isHost && connectUrl && (
         <div className="rounded-lg border border-accent/50 bg-accent/10 p-4">
           <p className="text-sm">
@@ -265,7 +244,6 @@ export function MusicDashboard({
                 size="sm"
                 variant="outline"
                 onClick={() => addToQueue(track)}
-                disabled={!isLoggedIn}
               >
                 Add
               </Button>
@@ -277,7 +255,7 @@ export function MusicDashboard({
       <section>
         <h2 className="mb-4 text-lg font-semibold">Apartment queue</h2>
         <p className="mb-3 text-sm text-muted-foreground">
-          Up next on Spotify
+          Up next on Spotify — updates live.
         </p>
         <ul className="space-y-2">
           {queue.slice(0, 10).map((item, i) => (
@@ -303,18 +281,16 @@ export function MusicDashboard({
                   {item.artist}
                 </p>
               </div>
-              {isLoggedIn && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => removeFromQueue(i, item.name)}
-                  disabled={removingIndex === i}
-                  aria-label={`Remove ${item.name} from queue`}
-                  className="text-red-500 hover:bg-red-500/10 hover:text-red-600"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              )}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => removeFromQueue(i, item.name)}
+                disabled={removingIndex === i}
+                aria-label={`Remove ${item.name} from queue`}
+                className="text-red-500 hover:bg-red-500/10 hover:text-red-600"
+              >
+                <X className="h-4 w-4" />
+              </Button>
             </li>
           ))}
           {queue.length === 0 && (
