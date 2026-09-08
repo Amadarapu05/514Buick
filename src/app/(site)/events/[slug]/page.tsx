@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { format } from "date-fns";
 import { createClient } from "@/lib/supabase/server";
 import { VENMO_URL, VENUE_ADDRESS, cn } from "@/lib/utils";
+import { formatEventDate } from "@/lib/datetime";
 import { getGoogleCalendarUrl } from "@/lib/calendar";
 import { RsvpSection } from "@/components/rsvp-section";
 import {
@@ -81,8 +81,8 @@ export default async function EventDetailPage({
 
   const heroUrl =
     images?.[0]?.url ?? event.cover_image_url ?? PLACEHOLDER;
-  const dateStr = format(
-    new Date(event.starts_at),
+  const dateStr = formatEventDate(
+    event.starts_at,
     "EEEE, MMMM d, yyyy · h:mm a"
   );
   const googleCalUrl = getGoogleCalendarUrl({

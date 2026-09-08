@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { format } from "date-fns";
 import { Calendar } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { EventCard } from "@/components/event-card";
 import { EventsTabs } from "@/components/events-tabs";
 import { ScrollReveal } from "@/components/scroll-reveal";
+import { formatEventDate } from "@/lib/datetime";
 import { VENUE_ADDRESS } from "@/lib/utils";
 
 const PLACEHOLDER =
@@ -88,8 +88,8 @@ export default async function EventsPage({
             <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
               <p className="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-accent">
                 Next up ·{" "}
-                {format(
-                  new Date(featuredEvent.starts_at),
+                {formatEventDate(
+                  featuredEvent.starts_at,
                   "EEEE, MMM d · h:mm a"
                 )}
               </p>

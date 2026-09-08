@@ -1,6 +1,6 @@
-import { format } from "date-fns";
 import { VENUE_ADDRESS } from "@/lib/utils";
 import { getAppOrigin } from "@/lib/spotify/redirect";
+import { formatEventDate } from "@/lib/datetime";
 
 /** Google Calendar template URL (UTC times as YYYYMMDDTHHmmssZ). */
 function toGCalUtc(date: Date): string {
@@ -45,7 +45,7 @@ export function getGoogleCalendarUrl(event: {
 }
 
 export function formatEventWhen(startsAt: string): string {
-  return format(new Date(startsAt), "EEE, MMM d · h:mm a");
+  return formatEventDate(startsAt, "EEE, MMM d · h:mm a");
 }
 
 export function buildRsvpConfirmationSms(event: {

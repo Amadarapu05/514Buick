@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { format } from "date-fns";
+import { formatEventDate } from "@/lib/datetime";
 import { Button } from "@/components/ui/button";
 import { DeleteEventButton } from "@/components/admin/delete-event-button";
 
@@ -41,7 +41,7 @@ export default async function AdminEventsPage() {
             <div>
               <p className="font-medium">{event.title}</p>
               <p className="text-sm text-muted-foreground">
-                {format(new Date(event.starts_at), "MMM d, yyyy")} ·{" "}
+                {formatEventDate(event.starts_at, "MMM d, yyyy · h:mm a")} ·{" "}
                 <span className="capitalize">{event.status}</span>
               </p>
             </div>

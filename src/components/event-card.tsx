@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { format } from "date-fns";
 import type { Event } from "@/lib/types/database";
+import { formatEventDate } from "@/lib/datetime";
 import { cn, VENUE_ADDRESS } from "@/lib/utils";
 
 const PLACEHOLDER =
@@ -14,7 +14,7 @@ interface EventCardProps {
 
 export function EventCard({ event, className }: EventCardProps) {
   const imageUrl = event.cover_image_url ?? PLACEHOLDER;
-  const dateStr = format(new Date(event.starts_at), "EEEE, MMM d · h:mm a");
+  const dateStr = formatEventDate(event.starts_at, "EEEE, MMM d · h:mm a");
 
   return (
     <Link
