@@ -42,14 +42,6 @@ export default async function EventRsvpsPage({
       (r.status === "going" || r.status === "maybe")
   );
 
-  const phones = [
-    ...new Set(
-      withPhone
-        .map((r) => r.phone as string)
-        .filter(Boolean)
-    ),
-  ];
-
   return (
     <div className="mx-auto max-w-2xl px-4 py-12">
       <Link
@@ -93,7 +85,7 @@ export default async function EventRsvpsPage({
         )}
       </ul>
 
-      <TextBlastForm eventTitle={event.title} phones={phones} />
+      <TextBlastForm eventId={id} recipientCount={withPhone.length} />
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { format } from "date-fns";
 import { createClient } from "@/lib/supabase/server";
 import { VENMO_URL, VENUE_ADDRESS, cn } from "@/lib/utils";
+import { getGoogleCalendarUrl } from "@/lib/calendar";
 import { RsvpSection } from "@/components/rsvp-section";
 import {
   RsvpListDialog,
@@ -84,6 +85,13 @@ export default async function EventDetailPage({
     new Date(event.starts_at),
     "EEEE, MMMM d, yyyy · h:mm a"
   );
+  const googleCalUrl = getGoogleCalendarUrl({
+    title: event.title,
+    slug: event.slug,
+    description: event.description,
+    starts_at: event.starts_at,
+    ends_at: event.ends_at,
+  });
 
   return (
     <article>
@@ -106,7 +114,7 @@ export default async function EventDetailPage({
           {event.title}
         </h1>
         <p className="mt-2 text-lg text-muted-foreground">{VENUE_ADDRESS}</p>
-        <div className="mt-6">
+        <div className="mt-6 flex flex-wrap gap-3">
           <a
             href={VENMO_URL}
             target="_blank"
@@ -114,6 +122,14 @@ export default async function EventDetailPage({
             className={cn(buttonVariants({ variant: "accent" }))}
           >
             $ Donate
+          </a>
+          <a
+            href={googleCalUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(buttonVariants({ variant: "outline" }))}
+          >
+            Add to calendar
           </a>
         </div>
         {event.description && (

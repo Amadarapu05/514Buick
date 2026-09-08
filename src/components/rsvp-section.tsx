@@ -64,8 +64,8 @@ export function RsvpSection({ eventId, eventStatus }: RsvpSectionProps) {
       setStatus(newStatus);
       setMessage(
         newStatus === "going"
-          ? "You're on the list! You may get texts about this event."
-          : "Got it — marked as maybe."
+          ? "You're on the list! Check your texts for a confirmation + calendar link."
+          : "Got it — marked as maybe. Check your texts for details."
       );
     }
     router.refresh();

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { normalizePhone } from "@/lib/phone";
+import { buildRsvpConfirmationSms } from "@/lib/calendar";
+import { getTwilioClient, sendSms } from "@/lib/twilio";
 import type { RsvpStatus } from "@/lib/types/database";
 
 export async function POST(request: Request) {
@@ -36,7 +38,7 @@ export async function POST(request: Request) {
 
   const { data: event } = await service
     .from("events")
-    .select("id, status")
+    .select("id, status, title, slug, description, starts_at, ends_at")
     .eq("id", eventId)
     .single();
 
@@ -71,6 +73,7 @@ export async function POST(request: Request) {
     updated_at: new Date().toISOString(),
   };
 
+  let rsvp;
   if (existing) {
     const { data, error } = await service
       .from("rsvps")
@@ -81,18 +84,37 @@ export async function POST(request: Request) {
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
-    return NextResponse.json({ rsvp: data });
+    rsvp = data;
+  } else {
+    const { data, error } = await service
+      .from("rsvps")
+      .insert(payload)
+      .select()
+      .single();
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    rsvp = data;
   }
 
-  const { data, error } = await service
-    .from("rsvps")
-    .insert(payload)
-    .select()
-    .single();
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  // Confirmation SMS — don't fail the RSVP if Twilio errors
+  let smsSent = false;
+  if (getTwilioClient() && (status === "going" || status === "maybe")) {
+    try {
+      const smsBody = buildRsvpConfirmationSms({
+        title: event.title,
+        slug: event.slug,
+        description: event.description,
+        starts_at: event.starts_at,
+        ends_at: event.ends_at,
+        status,
+      });
+      await sendSms(phone, smsBody);
+      smsSent = true;
+    } catch (e) {
+      console.error("RSVP confirmation SMS failed:", e);
+    }
   }
 
-  return NextResponse.json({ rsvp: data });
+  return NextResponse.json({ rsvp, smsSent });
 }
